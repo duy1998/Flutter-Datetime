@@ -5,7 +5,7 @@ import 'i18n_model.dart';
 /// Example:
 ///     formatDate(new DateTime(2018,8,31), [ymdw]);
 ///     // => Today
-const String ydmw = 'ydmw';
+const String ymdw = 'ymdw';
 
 ///
 /// Example:
@@ -244,7 +244,7 @@ String formatDate(DateTime date, List<String> formats, LocaleType locale) {
       } else if (locale == LocaleType.si) {
         return formatDate(date, [D, ', ', dd, '. ', M, '.'], locale);
       } else {
-        return formatDate(date, [D, ' ', M, ' ', dd], locale);
+        return formatDate(date, [D, ' ', dd, ' ', MM], locale);
       }
     } else {
       if (locale == LocaleType.zh) {
@@ -262,7 +262,7 @@ String formatDate(DateTime date, List<String> formats, LocaleType locale) {
       } else if (locale == LocaleType.si) {
         return formatDate(date, [D, ', ', dd, '. ', M, '. ', yyyy], locale);
       } else {
-        return formatDate(date, [D, ' ', M, ' ', dd, ', ', yyyy], locale);
+        return formatDate(date, [D, ' ', dd, ' ', M, ', ', yyyy], locale);
       }
     }
   }

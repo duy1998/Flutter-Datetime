@@ -1,6 +1,5 @@
 import 'package:flutter_datetime_picker/src/date_format.dart';
 import 'package:flutter_datetime_picker/src/i18n_model.dart';
-import 'date_format.dart';
 import 'datetime_util.dart';
 import 'dart:math';
 
@@ -586,7 +585,7 @@ class DateTimePickerModel extends CommonPickerModel {
     } else if (maxTime != null && time.isAfter(maxTime) && !isAtSameDay(maxTime, time)) {
       return null;
     }
-    return formatDate(time, [ydmw], locale);
+    return formatDate(time, [ymdw], locale);
   }
 
   @override
