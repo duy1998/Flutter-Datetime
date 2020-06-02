@@ -1,4 +1,4 @@
-enum LocaleType {
+﻿enum LocaleType {
   en,
   fa,
   zh,
@@ -702,18 +702,18 @@ final _i18nModel = {
     'done': 'Xong',
     'today': 'Hôm nay',
     'monthShort': [
-      'Thg1',
-      'Thg2',
-      'Thg3',
-      'Thg4',
-      'Thg5',
-      'Thg6',
-      'Thg7',
-      'Thg8',
-      'Thg9',
-      'Thg10',
-      'Thg11',
-      'Thg12'
+      'Tháng 1',
+      'Tháng 2',
+      'Tháng 3',
+      'Tháng 4',
+      'Tháng 5',
+      'Tháng 6',
+      'Tháng 7',
+      'Tháng 8',
+      'Tháng 9',
+      'Tháng 10',
+      'Tháng 11',
+      'Tháng 12'
     ],
     'monthLong': [
       'Tháng 1',
