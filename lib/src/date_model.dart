@@ -292,7 +292,7 @@ class DatePickerModel extends CommonPickerModel {
     }
 
     _fillMiddleLists();
-    _fillRightLists();
+    _fillLeftLists();
     minMonth = _minMonthOfCurrentYear();
     int minDay = _minDayOfCurrentMonth();
     _currentMiddleIndex = currentTime.month - minMonth;
