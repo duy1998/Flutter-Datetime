@@ -157,6 +157,13 @@ class DatePickerModel extends CommonPickerModel {
     _currentRightIndex = this.currentTime.year - this.minTime.year;
   }
 
+  void _fillLeftLists() {
+    this.leftList = List.generate(maxTime.year - minTime.year + 1, (int index) {
+      // print('LEFT LIST... ${minTime.year + index}${_localeYear()}');
+      return '${minTime.year + index}${_localeYear()}';
+    });
+  }
+
   int _maxMonthOfCurrentYear() {
     return currentTime.year == maxTime.year ? maxTime.month : 12;
   }
@@ -174,14 +181,6 @@ class DatePickerModel extends CommonPickerModel {
     return currentTime.year == minTime.year && currentTime.month == minTime.month ? minTime.day : 1;
   }
 
-  void _fillLeftLists() {
-    int maxDay = _maxDayOfCurrentMonth();
-    int minDay = _minDayOfCurrentMonth();
-    this.leftList = List.generate(maxDay - minDay + 1, (int index) {
-      return '${minDay + index}${_localeDay()}';
-    });
-  }
-
   void _fillMiddleLists() {
     int minMonth = _minMonthOfCurrentYear();
     int maxMonth = _maxMonthOfCurrentYear();
@@ -192,27 +191,61 @@ class DatePickerModel extends CommonPickerModel {
   }
 
   void _fillRightLists() {
-    this.rightList = List.generate(maxTime.year - minTime.year + 1, (int index) {
-      // print('LEFT LIST... ${minTime.year + index}${_localeYear()}');
-      return '${minTime.year + index}${_localeYear()}';
+    int maxDay = _maxDayOfCurrentMonth();
+    int minDay = _minDayOfCurrentMonth();
+    this.rightList = List.generate(maxDay - minDay + 1, (int index) {
+      return '${minDay + index}${_localeDay()}';
     });
   }
 
   @override
   void setLeftIndex(int index) {
     super.setLeftIndex(index);
+    //adjust middle
+    int destYear = index + minTime.year;
+    int minMonth = _minMonthOfCurrentYear();
+    DateTime newTime;
+    //change date time
+    if (currentTime.month == 2 && currentTime.day == 29) {
+      newTime = currentTime.isUtc
+          ? DateTime.utc(
+              destYear,
+              currentTime.month,
+              calcDateCount(destYear, 2),
+            )
+          : DateTime(
+              destYear,
+              currentTime.month,
+              calcDateCount(destYear, 2),
+            );
+    } else {
+      newTime = currentTime.isUtc
+          ? DateTime.utc(
+              destYear,
+              currentTime.month,
+              currentTime.day,
+            )
+          : DateTime(
+              destYear,
+              currentTime.month,
+              currentTime.day,
+            );
+    }
+    //min/max check
+    if (newTime.isAfter(maxTime)) {
+      currentTime = maxTime;
+    } else if (newTime.isBefore(minTime)) {
+      currentTime = minTime;
+    } else {
+      currentTime = newTime;
+    }
+
+    _fillMiddleLists();
+    _fillRightLists();
+    minMonth = _minMonthOfCurrentYear();
     int minDay = _minDayOfCurrentMonth();
-    currentTime = currentTime.isUtc
-        ? DateTime.utc(
-      currentTime.year,
-      currentTime.month,
-      minDay + index,
-    )
-        : DateTime(
-      currentTime.year,
-      currentTime.month,
-      minDay + index,
-    );
+    _currentMiddleIndex = currentTime.month - minMonth;
+    _currentRightIndex = currentTime.day - minDay;
   }
 
   @override
@@ -252,51 +285,18 @@ class DatePickerModel extends CommonPickerModel {
   @override
   void setRightIndex(int index) {
     super.setRightIndex(index);
-    //adjust middle
-    int destYear = index + minTime.year;
-    int minMonth = _minMonthOfCurrentYear();
-    DateTime newTime;
-    //change date time
-    if (currentTime.month == 2 && currentTime.day == 29) {
-      newTime = currentTime.isUtc
-          ? DateTime.utc(
-        destYear,
-        currentTime.month,
-        calcDateCount(destYear, 2),
-      )
-          : DateTime(
-        destYear,
-        currentTime.month,
-        calcDateCount(destYear, 2),
-      );
-    } else {
-      newTime = currentTime.isUtc
-          ? DateTime.utc(
-        destYear,
-        currentTime.month,
-        currentTime.day,
-      )
-          : DateTime(
-        destYear,
-        currentTime.month,
-        currentTime.day,
-      );
-    }
-    //min/max check
-    if (newTime.isAfter(maxTime)) {
-      currentTime = maxTime;
-    } else if (newTime.isBefore(minTime)) {
-      currentTime = minTime;
-    } else {
-      currentTime = newTime;
-    }
-
-    _fillMiddleLists();
-    _fillRightLists();
-    minMonth = _minMonthOfCurrentYear();
     int minDay = _minDayOfCurrentMonth();
-    _currentMiddleIndex = currentTime.month - minMonth;
-    _currentRightIndex = currentTime.day - minDay;
+    currentTime = currentTime.isUtc
+        ? DateTime.utc(
+            currentTime.year,
+            currentTime.month,
+            minDay + index,
+          )
+        : DateTime(
+            currentTime.year,
+            currentTime.month,
+            minDay + index,
+          );
   }
 
   @override
